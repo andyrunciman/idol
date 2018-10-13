@@ -35,17 +35,17 @@ const ContactSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: val => validate.isPostalCode(val, 'GB'),
-      message: 'Please enter a valid UK Postcode'
+      message: 'Postcode must be a valid UK Postcode'
     }
   },
-  telephone: {
+  phonenumber: {
     type: String,
-    minlength: 6,
-    maxlength: 12,
+    minlength: [6, 'Phone numbers must be between 6-12 digits long'],
+    maxlength: [12, 'Phone numbers must be between 6-12 digits long'],
     validate: {
       validator: val => /^[0-9]*$/.test(val),
-      messgage:
-        'Phone numbers cannot contain spaces special characters e.g () or - '
+      message:
+        'Phone numbers cannot contain spaces special characters e.g () or -'
     }
     //TODO add some sort of validation - maybe all numbers?? Min/Max
   },

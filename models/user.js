@@ -76,8 +76,8 @@ UserSchema.methods.generateAuthToken = function() {
  * @param {String} token
  */
 UserSchema.methods.removeToken = function(token) {
-  const user = this.user;
-  user.update({ $pull: { tokens: { token } } });
+  const user = this;
+  return user.updateOne({ $pull: { tokens: { token } } });
 };
 
 /**
@@ -98,6 +98,32 @@ UserSchema.statics.findByToken = function(token) {
     _id: decoded._id,
     'tokens.token': token,
     'tokens.access': 'auth'
+  });
+};
+
+/**
+ * Checks that a user is valid based on email and password
+ * @param {String} token
+ * @returns user
+ */
+UserSchema.statics.findByCredentials = function(email, password) {
+  var User = this;
+
+  return User.findOne({ email }).then(user => {
+    if (!user) {
+      return Promise.reject();
+    }
+
+    return new Promise((resolve, reject) => {
+      // Use bcrypt.compare to compare password and user.password
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (res) {
+          resolve(user);
+        } else {
+          reject();
+        }
+      });
+    });
   });
 };
 

@@ -33,12 +33,10 @@ module.exports = app => {
         res.status(200).send(contact);
       })
       .catch(err => {
-        //console.log(err.errors);
         const errors = [];
         for (key of Object.keys(err.errors)) {
-          console.log(key);
           errors.push({
-            error: err.errors[key].message,
+            message: err.errors[key].message,
             field: key
           });
         }
