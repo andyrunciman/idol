@@ -9,7 +9,7 @@
 const mongoose = require('mongoose');
 const keys = require('../config/keys');
 const jwt = require('jsonwebtoken');
-const validator = require('validator');
+const validate = require('validator');
 const bcrypt = require('bcryptjs');
 
 var UserSchema = new mongoose.Schema({
@@ -19,14 +19,14 @@ var UserSchema = new mongoose.Schema({
     trim: true,
     unique: true,
     minlength: 1,
-    validation: {
-      validiator: validator.isEmail,
+    validate: {
+      validator: validate.isEmail,
       message: 'Email address must be valid'
     }
   },
   password: {
     type: String,
-    require: true,
+    required: true,
     minlength: [6, 'Password should be a minimum of 6 characters']
   },
   tokens: [
@@ -49,9 +49,9 @@ var UserSchema = new mongoose.Schema({
 UserSchema.methods.toJSON = function() {
   //Note - do not change to arrow as the this context will be bound to the wrong context!!
   const user = this;
-  const { _id, username } = user.toObject();
+  const { _id, email } = user.toObject();
   //destructure the user object so that we dont send back the token/password
-  return { _id, username };
+  return { _id, email };
 };
 
 /**
@@ -66,7 +66,7 @@ UserSchema.methods.generateAuthToken = function() {
     keys.jwtSecret
   );
   user.tokens.push({ token, access });
-  return user.save().then(() => {
+  return user.save().then(user => {
     return token;
   });
 };
@@ -108,12 +108,10 @@ UserSchema.statics.findByToken = function(token) {
  */
 UserSchema.statics.findByCredentials = function(email, password) {
   var User = this;
-
   return User.findOne({ email }).then(user => {
     if (!user) {
       return Promise.reject();
     }
-
     return new Promise((resolve, reject) => {
       // Use bcrypt.compare to compare password and user.password
       bcrypt.compare(password, user.password, (err, res) => {

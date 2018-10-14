@@ -14,7 +14,10 @@ const userOne = {
   password: '123456',
   tokens: [
     {
-      token: jwt.sign({ _id: userOneId, access: 'auth' }, keys.jwtSecret),
+      token: jwt.sign(
+        { _id: userOneId.toHexString(), access: 'auth' },
+        keys.jwtSecret
+      ),
       access: 'auth'
     }
   ]
@@ -72,4 +75,12 @@ const populateContacts = () =>
   //doesnt need done as returning a promise
   Contact.deleteMany({}).then(() => Contact.insertMany(contacts));
 
-module.exports = { contacts, populateContacts, users, populateUsers };
+const deleteUsers = () => User.deleteMany({});
+
+module.exports = {
+  contacts,
+  populateContacts,
+  deleteUsers,
+  users,
+  populateUsers
+};

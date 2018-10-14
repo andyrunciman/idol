@@ -10,16 +10,130 @@ const {
 } = require('./seed/seed');
 const Contact = require('../models/contact');
 
-beforeEach(populateContacts);
-beforeEach(populateUsers);
+describe('DELETE /api/contact/:id', () => {
+  beforeEach(populateContacts);
+  beforeEach(populateUsers);
+  it('should not allow an unathorised user to delete a contact', done => {
+    request(app)
+      .delete(`/api/contact/${contacts[0]._id}`)
+      .expect(401)
+      .end(done);
+  });
+  it('should not allow an authorised user to delete a contact that does not belong to them', done => {
+    request(app)
+      .delete(`/api/contact/${contacts[2]._id}`)
+      .set('x-auth', users[0].tokens[0].token)
+      .expect(400)
+      .end(done);
+  });
+  it('should allow an authenticated user to delete their own contact ', done => {
+    request(app)
+      .delete(`/api/contact/${contacts[0]._id}`)
+      .set('x-auth', users[0].tokens[0].token)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        Contact.findOne({ _id: contacts[0]._id }).then(contact => {
+          expect(contact).toBeFalsy;
+          done();
+        });
+      });
+  });
+});
 
-describe('DELETE /api/contact:id', () => {});
+describe('PATCH /api/contact:id', () => {
+  beforeEach(populateContacts);
+  beforeEach(populateUsers);
+  it('should not update contact for an unauthenticated user', done => {
+    request(app)
+      .patch(`/api/contact/${contacts[0]._id}`)
+      .expect(401)
+      .end(done);
+  });
 
-describe('PATCH /api/contact:id', () => {});
+  it('should update the contact for logged in user', done => {
+    const email = 'new@test.com';
+    request(app)
+      .patch(`/api/contact/${contacts[0]._id}`)
+      .set('x-auth', users[0].tokens[0].token)
+      .send({ email })
+      .expect(200)
+      .expect(res => {
+        expect(res.body._id).toBe(contacts[0]._id.toHexString());
+        expect(res.body.email).toBe(email);
+      })
+      .end(done);
+  });
 
-describe('GET /api/contact:id', () => {});
+  it('should not update the a contact that does not belong to an autenticated user', done => {
+    const email = 'new@test.com';
+    request(app)
+      .patch(`/api/contact/${contacts[2]._id}`)
+      .set('x-auth', users[0].tokens[0].token)
+      .send({ email })
+      .expect(400)
+      .end(done);
+  });
+});
+
+describe('GET /api/contact:id', () => {
+  beforeEach(populateContacts);
+  beforeEach(populateUsers);
+
+  it('should not return a contact for an unauthenticated user', done => {
+    request(app)
+      .get(`/api/contact/${contacts[0]._id}`)
+      .expect(401)
+      .end(done);
+  });
+
+  it('should return the contact for logged in user', done => {
+    request(app)
+      .get(`/api/contact/${contacts[0]._id}`)
+      .set('x-auth', users[0].tokens[0].token)
+      .expect(200)
+      .expect(res => {
+        expect(res.body._id).toBe(contacts[0]._id.toHexString());
+      })
+      .end(done);
+  });
+
+  it('should not return a contact that does not belong to a user', done => {
+    request(app)
+      .get(`/api/contact/${contacts[2]._id}`)
+      .set('x-auth', users[0].tokens[0].token)
+      .expect(404)
+      .end(done);
+  });
+});
+
+describe('GET /api/contacts', done => {
+  beforeEach(populateContacts);
+  beforeEach(populateUsers);
+
+  it('should return a status 404 for an unauthenticated user', done => {
+    request(app)
+      .get('/api/contacts')
+      .expect(401)
+      .end(done);
+  });
+
+  it('should return the contacts for logged in user', done => {
+    request(app)
+      .get('/api/contacts')
+      .set('x-auth', users[0].tokens[0].token)
+      .expect(200)
+      .expect(res => {
+        expect(res.body.length).toBe(2);
+      })
+      .end(done);
+  });
+});
 
 describe('POST /api/contact', () => {
+  beforeEach(populateContacts);
+  beforeEach(populateUsers);
+
   it('should sanitise input and remove unspecified fields', done => {
     const contact = {
       _id: new ObjectID(),

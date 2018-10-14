@@ -13,8 +13,15 @@ const { ObjectID } = require('mongodb');
 const authenticate = require('../middleware/authenticate');
 
 module.exports = app => {
-  app.get('/api/contacts', (req, res) => {
-    res.status(200).send();
+  app.get('/api/contacts', authenticate, (req, res) => {
+    const user = req.user;
+    Contact.find({ _creator: user._id })
+      .then(contacts => {
+        res.status(200).send(contacts);
+      })
+      .catch(err => {
+        res.status(500).send({ error: 'something went wrong' });
+      });
   });
 
   /**
@@ -57,7 +64,7 @@ module.exports = app => {
     const id = req.params.id;
     const user = req.user;
     //TODO: check contact belongs to authenticated user.
-    if (!ObjectID.isValid())
+    if (!ObjectID.isValid(id))
       return res.status(400).send({ error: 'Invalid id' });
 
     Contact.findOne({ _id: id, _creator: user._id })
@@ -80,13 +87,14 @@ module.exports = app => {
    * @access          private
    * @returns         Deleted Contact or Null
    */
-  app.delete('/api/contact/:id', (req, res) => {
+  app.delete('/api/contact/:id', authenticate, (req, res) => {
     const id = req.params.id;
-    if (!ObjectID.isValid()) {
+    const user = req.user;
+    if (!ObjectID.isValid(id)) {
       return res.status(400).send({ error: 'Invalid ID' });
     }
     //Note:Dont use findOne as it doesnt return the deleted record.
-    Contact.findOneAndDelete({ _id: id })
+    Contact.findOneAndDelete({ _id: id, _creator: user._id })
       .then(contact => {
         if (!contact) {
           return res.status(400).send({ error: 'Contact cannot be deleted' });
@@ -106,17 +114,22 @@ module.exports = app => {
    * @access          private
    * @returns         Updated Contact or null
    */
-  app.patch('/api/contact/:id', (req, res) => {
+  app.patch('/api/contact/:id', authenticate, (req, res) => {
+    const user = req.user;
     const id = req.params.id;
-    if (!ObjectID.isValid()) {
+    if (!ObjectID.isValid(id)) {
       return res.status(400).send({ error: 'Invalid ID' });
     }
-    Contact.findByOneAndUpdate({ _id: id }, { $set: req.body }, { new: true })
+    Contact.findOneAndUpdate(
+      { _id: id, _creator: user._id },
+      { $set: req.body },
+      { new: true }
+    )
       .then(contact => {
         if (!contact) {
-          return res.send(400).send({ error: 'Contact can not be updated' });
+          return res.status(400).send({ error: 'Contact can not be updated' });
         }
-        return res.send(200).send(contact);
+        return res.status(200).send(contact);
       })
       .catch(err => {
         res.send.status(400).send({ error: 'Contact cannot be updated' });

@@ -16,15 +16,14 @@ module.exports = app => {
    */
   app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
-    User.findOne({ email })
+    User.findByCredentials(email, password)
       .then(user => {
         if (!user) {
           res.status(401).send({ error: 'Invalid login' });
         }
-        return user.findByCredentials(email, password);
+        return user.generateAuthToken();
       })
-      .then(user => user.generateAuthToken())
-      .then(token => res.header('x-auth', token).send(user))
+      .then(token => res.header('x-auth', token).send())
       .catch(err => {
         res.status(401).send({ error: 'Invalid login' });
       });
@@ -58,18 +57,17 @@ module.exports = app => {
    * @param {string} password
    */
   app.post('/api/user', (req, res) => {
-    var { email = null, password = null } = req.body;
-    var user = new User({ email, password });
+    const { email = null, password = null, _id } = req.body;
+    const user = new User({ email, password, _id });
     user
       .save()
       .then(() => {
         return user.generateAuthToken();
       })
       .then(token => {
-        return res.header('x-auth', token).send(user);
+        res.header('x-auth', token).send(user);
       })
       .catch(err => {
-        console.log(err);
         //TODO - switch statement handle all erorrs
         if (err.code === 11000 || err.code === 11001) {
           //ERR CODES 11000 and 11001 are Mongoose duplicate codes.
