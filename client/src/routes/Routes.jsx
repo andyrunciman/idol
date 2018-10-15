@@ -5,16 +5,20 @@ import Register from '../features/auth/register/Register';
 import ContactsDashboard from '../features/dashboard/ContactsDashboard';
 import CreateContact from '../features/contact/CreateContact';
 import EditContact from '../features/contact/EditContact';
+import PrivateRoute from '../routes/PrivateRoute';
+import PublicRoute from '../routes/PublicRoute';
+import NoMatch from './NoMatch';
 
 export default () => (
   <BrowserRouter>
     <Switch>
-      <Route exact path="/" component={Login} />
-      <Route exact path="/dashboard" component={ContactsDashboard} />
-      <Route exact path="/create" component={CreateContact} />
-      <Route exact path="/edit/:id" component={EditContact} />
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
+      <PublicRoute exact path="/" component={Login} />
+      <PrivateRoute exact path="/dashboard" component={ContactsDashboard} />
+      <PrivateRoute exact path="/create" component={CreateContact} />
+      <PrivateRoute exact path="/edit/:id" component={EditContact} />
+      <PublicRoute exact path="/login" component={Login} />
+      <PublicRoute exact path="/register" component={Register} />
+      <Route component={NoMatch} />
     </Switch>
   </BrowserRouter>
 );

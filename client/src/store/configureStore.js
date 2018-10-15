@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import contactReducer from '../features/contact/contactReducer';
 import authReducer from '../features/auth/authReducer';
 import asyncReducer from '../features/async/asyncReducer';
+import filterReducer from '../features/filter/filterReducer';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -11,7 +12,8 @@ export default () => {
     combineReducers({
       contacts: contactReducer,
       auth: authReducer,
-      async: asyncReducer
+      async: asyncReducer,
+      filter: filterReducer
     }),
     composeEnhancers(applyMiddleware(thunk))
   );

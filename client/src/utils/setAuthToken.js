@@ -6,8 +6,11 @@ import axios from 'axios';
 const setAuthToken = token => {
   if (token) {
     axios.defaults.headers.common['x-auth'] = token;
+    sessionStorage.setItem('jwttoken', token);
+    //add to local storage so that we can retrieve it upon refresh
   } else {
     delete axios.defaults.headers.common['x-auth'];
+    sessionStorage.removeItem('jwttoken');
   }
 };
 

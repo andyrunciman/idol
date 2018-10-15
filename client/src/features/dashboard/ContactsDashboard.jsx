@@ -1,31 +1,48 @@
 import React, { Component } from 'react';
-import ContactList from '../contact/ContactList';
-import ContactCards from '../contact/ContactCards';
 import { connect } from 'react-redux';
+import { logout } from '../auth/authActions';
 import { fetchContacts } from '../contact/contactActions';
+import { setFilter, clearFilter } from '../filter/filterActions';
+import Header from '../layout/Header';
+import Button from '../controls/Button';
+import ContactList from '../contact/ContactList';
+import ContactFilter from '../filter/ContactFilter';
 
 class ContactsDashboard extends Component {
   componentDidMount() {
     this.props.fetchContacts();
   }
-
+  /**
+   * Filters the contacts
+   * @param {String} filter
+   */
+  filterContacts = () => {
+    if (this.props.contacts && this.props.filter) {
+      return this.props.contacts.filter(contact =>
+        contact.name.includes(this.props.filter)
+      );
+    }
+    return this.props.contacts;
+  };
   render() {
-    console.log(this.props.contacts);
     return (
-      <div>
-        <ContactList />
-        <ContactCards />
-      </div>
+      <React.Fragment>
+        <Header title="Contacts Dashboard">
+          <Button content="Logout" link onClick={this.props.logout} />
+        </Header>
+        <ContactFilter setFilter={this.props.setFilter} />
+        <ContactList contacts={this.filterContacts()} />
+      </React.Fragment>
     );
   }
 }
 
 const mapStateToProps = state => ({
   contacts: state.contacts,
-  async: state.async
+  filter: state.filter
 });
 
 export default connect(
   mapStateToProps,
-  { fetchContacts }
+  { logout, fetchContacts, setFilter, clearFilter }
 )(ContactsDashboard);

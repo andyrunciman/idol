@@ -1,0 +1,24 @@
+.input {
+    border: 1px solid #cacccd;
+    height: 50px;
+    font-size: var(--font-size-large);
+    font-weight: 300;
+    padding: var(--s-size);
+    margin-bottom:var(--s-size);
+    width:100%;
+  }
+.select {
+    border: 1px solid #cacccd;
+    height: 50px;
+    font-size: var(--font-size-large);
+    font-weight: 300;
+    padding: var(--s-size);
+}
+.textarea {
+    border: 1px solid #cacccd;
+    font-size: var(--font-size-large);
+    font-weight: 300;
+    padding: var(--s-size);
+    height: 10rem;
+}
+  

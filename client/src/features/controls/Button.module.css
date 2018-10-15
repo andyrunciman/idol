@@ -1,0 +1,21 @@
+.button {
+    background: var(--blue);
+    border: none;
+    color: white;
+    display: inline-block;
+    font-size: var(--font-size-large);
+    font-weight: 300;
+    line-height: 1;
+    padding: var(--s-size);
+    text-decoration: none;
+    transition:all .2s
+  }
+  
+  .link {
+    background: none;
+  }
+  
+  .secondary {
+    background: #888;
+  }
+  

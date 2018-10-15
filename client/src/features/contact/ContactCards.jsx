@@ -1,7 +1,6 @@
 import React from 'react';
-
 const ContactCards = () => {
-  return <div>Contact Cards</div>;
+  return <div>contact cardws</div>;
 };
 
 export default ContactCards;

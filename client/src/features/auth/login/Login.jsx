@@ -1,15 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { login } from '../authActions';
 import { connect } from 'react-redux';
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Message,
-  Segment
-} from 'semantic-ui-react';
+import Input from '../../controls/Input';
+import Button from '../../controls/Button';
+import styles from './Login.module.css';
 
 /**
  * Login class which handles the rendering of the login screen
@@ -33,7 +27,8 @@ class Login extends React.Component {
     }
   }
 
-  handleLogin = () => {
+  handleLogin = event => {
+    event.preventDefault();
     this.props.login({
       email: this.state.email,
       password: this.state.password
@@ -49,63 +44,34 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className="login-form">
-        <Grid
-          textAlign="center"
-          style={{ height: '100%', marginTop: '3rem' }}
-          verticalAlign="middle"
-        >
-          <Grid.Column style={{ maxWidth: 450 }}>
-            <Header as="h2" color="teal" textAlign="center">
-              Contact Manager
-            </Header>
-            <Form
-              size="large"
-              loading={this.props.async.loading}
-              error={!!this.props.async.error}
-            >
-              <Segment>
-                <Form.Input
-                  fluid
-                  icon="user"
-                  iconPosition="left"
-                  placeholder="E-mail address"
-                  onChange={this.handleChange}
-                  value={this.state.email}
-                  name="email"
-                />
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder="Password"
-                  type="password"
-                  onChange={this.handleChange}
-                  value={this.state.password}
-                  name="password"
-                />
+      <div className={styles.layout}>
+        <div className={styles.box}>
+          <h1 className={styles.title}>Contact Manager</h1>
+          <p className={styles.subtitle}>Manage your contacts with style!</p>
 
-                <Button
-                  color="teal"
-                  fluid
-                  size="large"
-                  onClick={this.handleLogin}
-                >
-                  Login
-                </Button>
-              </Segment>
-              <Message
-                error
-                header="Login Failed"
-                content="The email or password that you have provided do not match those for your account "
-              />
-            </Form>
+          <form className={styles.form} onSubmit={this.handleLogin}>
+            <Input
+              name="email"
+              onChange={this.handleChange}
+              value={this.state.email}
+              placeholder="Email"
+            />
+            <Input
+              name="password"
+              type="password"
+              placeholder="Password"
+              onChange={this.handleChange}
+              value={this.state.password}
+            />
 
-            <Message>
-              Not registered yet? <Link to="/register">Sign Up</Link>
-            </Message>
-          </Grid.Column>
-        </Grid>
+            <Button type="submit" content="Log In" />
+            {this.props.async.error && (
+              <p className={styles.error}>
+                Your email and/or password do not match those on our system
+              </p>
+            )}
+          </form>
+        </div>
       </div>
     );
   }
