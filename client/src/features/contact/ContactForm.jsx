@@ -17,9 +17,13 @@ class ContactForm extends React.Component {
     postcode: '',
     dob: ''
   };
+  /**
+   * Checks to see if we have a contact to populate the form with and then updates the state
+   * @param {Object} props
+   * @param {Object} state
+   */
   static getDerivedStateFromProps(props, state) {
     if (props.contact && props.contact._id !== state._id) {
-      console.log(props.contact);
       return {
         ...props.contact,
         dob: !isEmpty(props.contact.dob)
@@ -36,6 +40,12 @@ class ContactForm extends React.Component {
     this.setState({ [name]: value });
   };
 
+  /**
+   * Client side validation to support the server side
+   * This returns the validation object in the same format
+   * as the server model so that irt can just be passed to the
+   * user controls
+   */
   clientSideValidation = () => {
     const errors = {};
     const contact = {};
@@ -122,21 +132,20 @@ class ContactForm extends React.Component {
       >
         <Input
           type="text"
+          name="name"
+          placeholder="Name"
+          value={this.state.name}
+          onChange={this.handleChange}
+          error={errors && errors['name']}
+        />
+        <Input
+          type="text"
           name="email"
           placeholder="Email"
           autoFocus
           value={this.state.email}
           onChange={this.handleChange}
           error={errors && errors['email']}
-        />
-
-        <Input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={this.state.name}
-          onChange={this.handleChange}
-          error={errors && errors['name']}
         />
 
         <Input
