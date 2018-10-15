@@ -19,3 +19,7 @@
     background: #888;
   }
   
+  .warning {
+    background:var(--red);
+  }
+  

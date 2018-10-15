@@ -40,12 +40,9 @@ module.exports = app => {
         res.status(200).send(contact);
       })
       .catch(err => {
-        const errors = [];
+        const errors = {};
         for (key of Object.keys(err.errors)) {
-          errors.push({
-            message: err.errors[key].message,
-            field: key
-          });
+          errors[key] = err.errors[key].message;
         }
 
         res.status(400).send({ errors });
@@ -120,10 +117,11 @@ module.exports = app => {
     if (!ObjectID.isValid(id)) {
       return res.status(400).send({ error: 'Invalid ID' });
     }
+
     Contact.findOneAndUpdate(
       { _id: id, _creator: user._id },
       { $set: req.body },
-      { new: true }
+      { new: true, runValidators: true }
     )
       .then(contact => {
         if (!contact) {
@@ -132,7 +130,11 @@ module.exports = app => {
         return res.status(200).send(contact);
       })
       .catch(err => {
-        res.send.status(400).send({ error: 'Contact cannot be updated' });
+        const errors = {};
+        for (key of Object.keys(err.errors)) {
+          errors[key] = err.errors[key].message;
+        }
+        res.status(400).send({ errors });
       });
   });
 };

@@ -5,6 +5,7 @@
 .title {
     color: white;
     text-decoration: none;
+    font-size:4rem;
 }
 
 .content {
@@ -14,6 +15,10 @@
     padding: var(--s-size) 0;
   }
   
-.title h1 {
-    margin: 0;
-}
+
+@media (max-width: 45rem) {
+    .title{
+      font-size:2.5rem;
+      margin-left:1rem;
+    } 
+  }

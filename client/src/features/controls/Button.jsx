@@ -1,16 +1,18 @@
 import React from 'react';
 import styles from './Button.module.css';
 
-export default function Button({ link, secondary, ...props }) {
+export default function Button({ link, secondary, warning, ...props }) {
   return (
     <button
       className={styleBuilder({
         link: link,
-        secondary: secondary
+        secondary: secondary,
+        warning: warning
       })}
       {...props}
     >
       {props.content}
+      {props.children}
     </button>
   );
 }
@@ -27,6 +29,9 @@ const styleBuilder = options => {
   }
   if (options.secondary) {
     styleList.push(styles.secondary);
+  }
+  if (options.warning) {
+    styleList.push(styles.warning);
   }
   return styleList.join(' ');
 };

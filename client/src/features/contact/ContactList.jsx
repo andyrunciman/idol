@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import ContactListItem from './ContactListItem';
+import Container from '../layout/Container';
 
 export default class ContactList extends Component {
   render() {
     return (
-      <div>
+      <Container>
         {this.props.contacts.map(contact => (
-          <ContactListItem contact={contact} />
+          <ContactListItem key={contact._id} contact={contact} />
         ))}
-      </div>
+      </Container>
     );
   }
 }

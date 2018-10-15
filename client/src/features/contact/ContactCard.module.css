@@ -1,0 +1,27 @@
+.card {
+    margin:2rem auto;
+    max-width:40rem;
+    height:25rem;
+    width:100%;
+    border:1px solid #cacccd;
+    padding:1rem;
+}
+
+.main{
+    color: var(--grey);
+    font-size: 3rem;
+}
+
+.secondary{
+  color: var(--grey);
+  font-size: var(--font-size-medium);
+  display:flex;
+  align-items: center;
+  height:3rem;
+}
+
+.icon {
+    width:2.5rem;
+    color:var(--blue);
+    
+}

@@ -1,7 +1,20 @@
 import React, { Component } from 'react';
+import Header from '../layout/Header';
+import Button from '../controls/Button';
+import Container from '../layout/Container';
+import ContactForm from '../contact/ContactForm';
 
 export default class CreateContact extends Component {
   render() {
-    return <div>Create contact</div>;
+    return (
+      <React.Fragment>
+        <Header title="Contacts Dashboard">
+          <Button content="Logout" link onClick={this.props.logout} />
+        </Header>
+        <Container>
+          <ContactForm />
+        </Container>
+      </React.Fragment>
+    );
   }
 }
