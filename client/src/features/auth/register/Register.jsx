@@ -1,53 +1,87 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Message,
-  Segment
-} from 'semantic-ui-react';
+import { register } from '../authActions';
+import { connect } from 'react-redux';
+import Input from '../../controls/Input';
+import Button from '../../controls/Button';
+import styles from './Register.module.css';
 
-const Register = () => (
-  <div className="registration-form">
-    <Grid
-      textAlign="center"
-      style={{ height: '100%', marginTop: '3rem' }}
-      verticalAlign="middle"
-    >
-      <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as="h2" color="teal" textAlign="center">
-          Contact Manager - Registration
-        </Header>
-        <Form size="large">
-          <Segment>
-            <Form.Input
-              fluid
-              icon="user"
-              iconPosition="left"
-              placeholder="E-mail address"
+/**
+ * Login class which handles the rendering of the login screen
+ */
+class Register extends React.Component {
+  state = {
+    email: '',
+    password: '',
+    errors: ''
+  };
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
+
+  handleLogin = event => {
+    event.preventDefault();
+    this.props.register({
+      email: this.state.email,
+      password: this.state.password
+    });
+  };
+
+  handleChange = event => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
+  render() {
+    return (
+      <div className={styles.layout}>
+        <div className={styles.box}>
+          <h1 className={styles.title}>Registration</h1>
+          <p className={styles.subtitle}>Manage your contacts with style!</p>
+
+          <form className={styles.form} onSubmit={this.handleLogin}>
+            <Input
+              name="email"
+              onChange={this.handleChange}
+              value={this.state.email}
+              placeholder="Email"
             />
-            <Form.Input
-              fluid
-              icon="lock"
-              iconPosition="left"
-              placeholder="Password"
+            <Input
+              name="password"
               type="password"
+              placeholder="Password"
+              onChange={this.handleChange}
+              value={this.state.password}
             />
 
-            <Button color="teal" fluid size="large">
-              Register
-            </Button>
-          </Segment>
-        </Form>
+            <Button type="submit" content="Register" />
+            {this.props.async.error && (
+              <p className={styles.error}>
+                Your email and/or password do not match those on our system
+              </p>
+            )}
+          </form>
+        </div>
+      </div>
+    );
+  }
+}
 
-        <Message>
-          Already Registered? <Link to="/login">Log in</Link>
-        </Message>
-      </Grid.Column>
-    </Grid>
-  </div>
-);
-
-export default Register;
+const mapStateToProps = state => ({
+  async: state.async,
+  auth: state.auth
+});
+export default connect(
+  mapStateToProps,
+  { register }
+)(Register);

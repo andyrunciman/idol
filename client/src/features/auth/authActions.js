@@ -44,3 +44,22 @@ export const login = user => dispatch => {
       });
     });
 };
+
+export const register = user => dispatch => {
+  dispatch({ type: ASYNC_ACTION_START });
+  axios
+    .post('/api/user', user)
+    .then(res => {
+      setAuthToken(res.headers['x-auth']);
+      dispatch({ type: LOGIN });
+      dispatch({ type: ASYNC_ACTION_STOP });
+    })
+    .catch(err => {
+      dispatch({
+        type: ASYNC_ACTION_ERROR,
+        payload: {
+          error: err.response.data.error
+        }
+      });
+    });
+};

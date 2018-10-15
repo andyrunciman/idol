@@ -1,0 +1,36 @@
+/* Large 6rem Medium 3rem small 1rem*/
+.layout {
+    background:url('./bg.jpg');
+    background-size:cover;
+    align-items: center;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    width: 100vw;
+  }
+  
+  .box {
+    background: white;
+    border-radius: 3px;
+    padding: var(--m-size) var(--s-size);
+    text-align: center;
+    width: 30rem;
+  }
+  
+  .title {
+    margin: 0 0 var(--m-size) 0;
+    line-height: 1;
+    
+  }
+
+  .subtitle {
+    margin: 0 0 var(--m-size) 0;
+    line-height: 1;
+    color:var(--blue)
+  }
+  
+  .error{
+      border:1px solid var(--red);
+      padding: var(--m-size);
+      margin-top: var(--s-size);
+  }
