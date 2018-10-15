@@ -17,10 +17,6 @@ require('./db/mongoose');
 
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  res.send('hello');
-});
-
 require('./routes/userRoutes')(app);
 require('./routes/contactRoutes')(app);
 
