@@ -24,6 +24,14 @@ app.get('/', (req, res) => {
 require('./routes/userRoutes')(app);
 require('./routes/contactRoutes')(app);
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname('client', 'build', 'index.html')));
+  });
+}
+
 server.listen(port, () => {
   console.log(`The server is running on port ${port}`);
 });

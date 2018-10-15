@@ -8,9 +8,7 @@ export default class EditContact extends Component {
   render() {
     return (
       <React.Fragment>
-        <Header title="Contacts Dashboard">
-          <Button content="Logout" link onClick={this.props.logout} />
-        </Header>
+        <Header title="Contacts Dashboard" />
         <Container>
           <ContactForm id={this.props.match.params.id} />
         </Container>
