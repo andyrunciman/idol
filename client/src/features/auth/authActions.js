@@ -4,6 +4,7 @@ import {
   ASYNC_ACTION_STOP,
   ASYNC_ACTION_ERROR
 } from '../async/asyncConstants';
+import { FETCH_CONTACTS } from '../contact/contactConstants';
 import { LOGIN, LOGOUT } from './authConstants';
 import setAuthToken from '../../utils/setAuthToken';
 

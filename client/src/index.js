@@ -12,6 +12,7 @@ const store = configureStore();
 const token = sessionStorage.getItem('jwttoken');
 if (token) {
   setAuthToken(token);
+
   store.dispatch({ type: 'LOGIN' });
 }
 
