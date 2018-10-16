@@ -1,6 +1,6 @@
 .container {
     margin: 0 auto;
-    padding: 0 var(--m-size);
+    padding: 0 1.6rem;
     max-width: 100rem;
 }
 

@@ -133,6 +133,7 @@ class ContactForm extends React.Component {
         <Input
           type="text"
           name="name"
+          autoFocus
           placeholder="Name"
           value={this.state.name}
           onChange={this.handleChange}
@@ -142,7 +143,6 @@ class ContactForm extends React.Component {
           type="text"
           name="email"
           placeholder="Email"
-          autoFocus
           value={this.state.email}
           onChange={this.handleChange}
           error={errors && errors['email']}

@@ -1,5 +1,5 @@
 .header {
-    background: var(--dark-blue);
+    background: #364051;
 }
   
 .title {
@@ -12,7 +12,7 @@
     align-items: center;
     display: flex;
     justify-content: space-between;
-    padding: var(--s-size) 0;
+    padding: 1.2rem 0;
   }
   
 

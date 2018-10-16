@@ -8,12 +8,12 @@
 }
 
 .main{
-    color: var(--grey);
+    color: #666;
     font-size: 3rem;
 }
 
 .secondary{
-  color: var(--grey);
+  color: #666;
   font-size: var(--font-size-medium);
   display:flex;
   align-items: center;
@@ -22,6 +22,6 @@
 
 .icon {
     width:2.5rem;
-    color:var(--blue);
+    color:#1c88bf;
     
 }
