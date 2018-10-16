@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 /**
  * Adds default headers to axios using the JWT token
  * @param {String} token

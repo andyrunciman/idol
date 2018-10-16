@@ -4,6 +4,11 @@ import { fetchContacts } from '../contact/contactActions';
 import { connect } from 'react-redux';
 
 class App extends Component {
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.fetchContacts();
+    }
+  }
   componentDidUpdate(prevProps) {
     if (
       this.props.auth.isAuthenticated &&
